@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import utilStyles from '../../styles/utils.module.css';
-import Layout from '../../components/layout';
+import Layout from '../../components/Layout';
 import { getAllPostIds, getPostData } from '../../lib/post';
 
 export async function getStaticPaths() {
