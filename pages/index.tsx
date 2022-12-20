@@ -1,31 +1,47 @@
+import { GetStaticProps } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
 import Layout, { siteTitle } from '../components/Layout';
 import { getPostData, getSortedPostsData } from '../lib/post';
 import utilStyles from '../styles/utils.module.css';
 
-export async function getStaticProps() {
+export const getStaticProps: GetStaticProps = async () => {
   const allPostsData = getSortedPostsData();
 
-  const postsData = allPostsData.filter(post => post.title !== 'introduction')
+  const postsData = allPostsData.filter((post) => post.title !== 'introduction');
   const introductionPost = await getPostData('introduction');
 
   return {
     props: {
       postsData,
       introductionPost
-    },
-  }
-}
+    }
+  };
+};
 
-export default function Home({ postsData, introductionPost }) {
-
+export default function Home({
+  postsData,
+  introductionPost
+}: {
+  postsData: {
+    date: string;
+    title: string;
+    id: string;
+  }[];
+  introductionPost: {
+    id: any;
+    contentHtml: string;
+  };
+}) {
   return (
     <Layout home>
       <Head>
         <title>{siteTitle}</title>
       </Head>
-      <section className={utilStyles.headingMd} dangerouslySetInnerHTML={{ __html: introductionPost.contentHtml }} />
+      <section
+        className={utilStyles.headingMd}
+        dangerouslySetInnerHTML={{ __html: introductionPost.contentHtml }}
+      />
 
       <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
         <h2 className={utilStyles.headingLg}>Blog</h2>
@@ -34,14 +50,11 @@ export default function Home({ postsData, introductionPost }) {
             <li className={utilStyles.listItem} key={id}>
               <Link href={`/posts/${id}`}>{title}</Link>
               <br />
-              <small className={utilStyles.lightText}>
-                {date}
-              </small>
+              <small className={utilStyles.lightText}>{date}</small>
             </li>
           ))}
         </ul>
       </section>
-
     </Layout>
   );
 }
